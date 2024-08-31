@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,17 +50,9 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "6986d033";
-
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-
-  useEffect(() => {
-      fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
-        .then((res) => res.json())
-        .then((data) => setMovies(data.Search));
-  },[]);
+    const [movies, setMovies] = useState(tempMovieData);
+    const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
@@ -82,21 +74,24 @@ export default function App() {
   );
 }
 
-function NavBar({ children }) {
-  return <nav className="nav-bar">{children}</nav>;
-}
+function NavBar({children}) {
 
-function Logo() {
   return (
-    <div className="logo">
-      <span role="img">🍿</span>
-      <h1>usePopcorn</h1>
-    </div>
+    <nav className="nav-bar">
+      {children}
+    </nav>
   );
 }
 
+function Logo() {
+  return (<div className="logo">
+    <span role="img">🍿</span>
+    <h1>usePopcorn</h1>
+  </div>);
+}
+
 function Search() {
-  const [query, setQuery] = useState("");
+      const [query, setQuery] = useState("");
   return (
     <input
       className="search"
@@ -108,7 +103,7 @@ function Search() {
   );
 }
 
-function NumResults({ movies }) {
+function NumResults({movies}) {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
@@ -116,16 +111,24 @@ function NumResults({ movies }) {
   );
 }
 
-function Main({ children }) {
-  return <main className="main">{children}</main>;
+function Main({children}) { 
+  
+  return (
+    <main className="main">
+      {children}
+    </main>
+  );
 }
 
-function Box({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
+function Box({children}) {
+    const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+      <button
+        className="btn-toggle"
+        onClick={() => setIsOpen((open) => !open)}
+      >
         {isOpen ? "–" : "+"}
       </button>
       {isOpen && children}
@@ -133,29 +136,30 @@ function Box({ children }) {
   );
 }
 
-function MovieList({ movies }) {
+function MovieList({movies}) {
+
   return (
     <ul className="list">
       {movies?.map((movie) => (
         <Movie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
-  );
+  ); 
 }
 
-function Movie({ movie }) {
+function Movie({movie}) {
   return (
-    <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
-      <div>
-        <p>
-          <span>🗓</span>
-          <span>{movie.Year}</span>
-        </p>
-      </div>
-    </li>
-  );
+    <li >
+              <img src={movie.Poster} alt={`${movie.Title} poster`} />
+              <h3>{movie.Title}</h3>
+              <div>
+                <p>
+                  <span>🗓</span>
+                  <span>{movie.Year}</span>
+                </p>
+              </div>
+            </li>
+  )
 }
 
 /*function WatchedBox() {
@@ -179,7 +183,7 @@ function Movie({ movie }) {
   );
 }
 */
-function WatchedSummary({ watched }) {
+function WatchedSummary({watched}) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
@@ -208,7 +212,7 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMoviesList({ watched }) {
+function WatchedMoviesList({watched}) {
   return (
     <ul className="list">
       {watched.map((movie) => (
@@ -218,25 +222,25 @@ function WatchedMoviesList({ watched }) {
   );
 }
 
-function WatchedMovie({ movie }) {
+function WatchedMovie({ movie }) { 
   return (
     <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
-      <div>
-        <p>
-          <span>⭐️</span>
-          <span>{movie.imdbRating}</span>
-        </p>
-        <p>
-          <span>🌟</span>
-          <span>{movie.userRating}</span>
-        </p>
-        <p>
-          <span>⏳</span>
-          <span>{movie.runtime} min</span>
-        </p>
-      </div>
-    </li>
-  );
+          <img src={movie.Poster} alt={`${movie.Title} poster`} />
+          <h3>{movie.Title}</h3>
+          <div>
+            <p>
+              <span>⭐️</span>
+              <span>{movie.imdbRating}</span>
+            </p>
+            <p>
+              <span>🌟</span>
+              <span>{movie.userRating}</span>
+            </p>
+            <p>
+              <span>⏳</span>
+              <span>{movie.runtime} min</span>
+            </p>
+          </div>
+        </li>
+  )
 }
